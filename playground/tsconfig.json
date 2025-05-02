@@ -16,8 +16,5 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true
-  },
-  "vueCompilerOptions": {
-    "plugins": ["../dist/volar.cjs"]
   }
 }

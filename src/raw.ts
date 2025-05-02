@@ -1,27 +1,29 @@
 import {
   HELPER_PREFIX,
   MagicStringAST,
-  REGEX_SETUP_SFC,
-  REGEX_SRC_FILE,
   createFilter,
   generateTransform,
-  getLang,
   importHelperFn,
-  parseSFC,
   walkAST,
 } from '@vue-macros/common'
 import { type Options, resolveOption } from './core/options'
 import type { Node } from 'oxc-parser'
 import type { UnpluginOptions } from 'unplugin'
 
-const { parseSync } = await import(
-  // @ts-ignore
-  typeof window !== 'undefined'
-    ? 'https://cdn.jsdelivr.net/npm/@oxc-parser/binding-wasm32-wasi/browser-bundle.mjs'
-    : 'oxc-parser'
-)
+let parseSync: typeof import('oxc-parser').parseSync
 
-function transform(code: string, s: MagicStringAST) {
+export async function transformJsxAwaitExpression(code: string, id: string) {
+  if (!parseSync) {
+    const oxcParser = await import(
+      // @ts-ignore
+      typeof window !== 'undefined'
+        ? 'https://cdn.jsdelivr.net/npm/@oxc-parser/binding-wasm32-wasi/browser-bundle.mjs'
+        : 'oxc-parser'
+    )
+    parseSync = oxcParser.parseSync
+  }
+
+  const s = new MagicStringAST(code)
   const { program } = parseSync('index.tsx', code, {
     sourceType: 'module',
   })
@@ -96,40 +98,6 @@ function transform(code: string, s: MagicStringAST) {
       }
     },
   })
-}
-
-export function transformJSXAwaitExpression(code: string, id: string) {
-  const lang = getLang(id)
-  let asts: {
-    text: string
-    offset: number
-  }[] = []
-  if (lang === 'vue' || REGEX_SETUP_SFC.test(id)) {
-    const { scriptSetup, script } = parseSFC(code, id)
-    if (script?.content) {
-      asts.push({
-        text: script.content,
-        offset: script.loc.start.offset,
-      })
-    }
-    if (scriptSetup) {
-      asts.push({
-        text: scriptSetup.content!,
-        offset: scriptSetup.loc.start.offset,
-      })
-    }
-  } else if (REGEX_SRC_FILE.test(id)) {
-    asts = [{ text: code, offset: 0 }]
-  } else {
-    return
-  }
-
-  const s = new MagicStringAST(code)
-
-  for (const { text, offset } of asts) {
-    s.offset = offset
-    transform(text, s)
-  }
 
   return generateTransform(s, id)
 }
@@ -146,7 +114,7 @@ const plugin = (rawOptions: Options = {}): UnpluginOptions => {
     transformInclude(id) {
       return filter(id)
     },
-    transform: transformJSXAwaitExpression,
+    transform: transformJsxAwaitExpression,
   }
 }
 export default plugin

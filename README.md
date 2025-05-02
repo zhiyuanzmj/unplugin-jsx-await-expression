@@ -93,18 +93,6 @@ module.exports = {
 
 <br></details>
 
-### Volar Config
-
-```jsonc
-// tsconfig.json
-{
-  // ...
-  "vueCompilerOptions": {
-    "plugins": ["unplugin-jsx-await-expression/volar"],
-  },
-}
-```
-
 ### [TS Macro](https://github.com/ts-macro/ts-macro) Config
 
 ```ts [tsm.config.json]
