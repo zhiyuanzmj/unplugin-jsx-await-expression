@@ -1,6 +1,6 @@
 {
   "name": "unplugin-jsx-await-expression",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@10.8.0",
   "description": "Reactivity function.",
   "type": "module",
