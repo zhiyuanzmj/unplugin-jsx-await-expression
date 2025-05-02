@@ -13,9 +13,8 @@ npm i -D unplugin-jsx-await-expression
 ## Usage
 
 ```tsx
-// ~/store/user.ts
-export default defineComponent(async () => {
-  return (
+export default defineComponent(() => {
+  return () => (
     <Suspense v-slots={{ fallback: () => <div>Loading...</div> }}>
       {await fetch('/api/user')
         .then(({ data }) => data.map((user) => <div>{user.name}</div>))
