@@ -1,0 +1,132 @@
+{
+  "name": "unplugin-jsx-await-expression",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.8.0",
+  "description": "Reactivity function.",
+  "type": "module",
+  "keywords": [
+    "unplugin",
+    "rollup",
+    "vite",
+    "esbuild",
+    "webpack"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/zhiyuanzmj/unplugin-jsx-await-expression#readme",
+  "bugs": {
+    "url": "https://github.com/zhiyuanzmj/unplugin-jsx-await-expression/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhiyuanzmj/unplugin-jsx-await-expression.git"
+  },
+  "author": "zhiyuanzmj",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./vite": {
+      "require": "./dist/vite.cjs",
+      "import": "./dist/vite.js"
+    },
+    "./webpack": {
+      "require": "./dist/webpack.cjs",
+      "import": "./dist/webpack.js"
+    },
+    "./rollup": {
+      "require": "./dist/rollup.cjs",
+      "import": "./dist/rollup.js"
+    },
+    "./esbuild": {
+      "require": "./dist/esbuild.cjs",
+      "import": "./dist/esbuild.js"
+    },
+    "./volar": {
+      "require": "./dist/volar.cjs",
+      "import": "./dist/volar.js"
+    },
+    "./raw": {
+      "require": "./dist/raw.cjs",
+      "import": "./dist/raw.js"
+    },
+    "./rolldown": {
+      "require": "./dist/rolldown.cjs",
+      "import": "./dist/rolldown.js"
+    },
+    "./rspack": {
+      "require": "./dist/rspack.cjs",
+      "import": "./dist/rspack.js"
+    },
+    "./nuxt": {
+      "require": "./dist/nuxt.cjs",
+      "import": "./dist/nuxt.js"
+    },
+    "./astro": {
+      "require": "./dist/astro.cjs",
+      "import": "./dist/astro.js"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint --cache .",
+    "lint:fix": "pnpm run lint --fix",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "play": "pnpm run -C ./playground dev",
+    "release": "bumpp && pnpm publish",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.16.2",
+    "@nuxt/schema": "^3.16.2",
+    "@vue-macros/common": "3.0.0-beta.8",
+    "oxc-parser": "^0.64.0",
+    "ts-macro": "^0.1.25",
+    "unplugin": "^2.3.2"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.27.0",
+    "@sxzz/eslint-config": "^3.14.0",
+    "@sxzz/prettier-config": "^2.0.2",
+    "@types/babel__traverse": "^7.20.7",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^20.14.11",
+    "@vue-macros/reactivity-transform": "^0.4.6",
+    "@vue-macros/test-utils": "^1.4.0",
+    "bumpp": "^9.4.1",
+    "change-case": "^5.4.4",
+    "eslint": "^9.7.0",
+    "eslint-define-config": "^2.1.0",
+    "fast-glob": "^3.3.2",
+    "prettier": "^3.3.3",
+    "tsup": "^8.2.2",
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.3",
+    "vite": "^6.3.0",
+    "vitest": "^2.0.3",
+    "vue": "^3.5.13"
+  },
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "prettier": "@sxzz/prettier-config"
+}

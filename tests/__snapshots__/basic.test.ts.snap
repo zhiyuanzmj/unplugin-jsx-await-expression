@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fixtures > tests/fixtures/basic.tsx 1`] = `
+"import { defineComponent, createVNode, Fragment } from 'vue';
+
+var basic = /* @__PURE__ */ defineComponent(() => {
+  const getList = async () => {
+    await new Promise(r => setTimeout(r, 1000));
+    return [1, 2, 3];
+  };
+  return () => createVNode(Fragment, null, [getList()]);
+});
+
+export { basic as default };
+"
+`;
