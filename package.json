@@ -88,8 +88,8 @@
   "scripts": {
     "lint": "eslint --cache .",
     "lint:fix": "pnpm run lint --fix",
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "test": "vitest",
     "play": "pnpm run -C ./playground dev",
     "release": "bumpp && pnpm publish",
@@ -120,6 +120,7 @@
     "eslint-define-config": "^2.1.0",
     "fast-glob": "^3.3.3",
     "prettier": "^3.5.3",
+    "tsdown": "0.11.0-beta.3",
     "tsup": "^8.4.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
