@@ -1,12 +1,12 @@
 import {
-  HELPER_PREFIX,
-  MagicStringAST,
   createFilter,
   generateTransform,
+  HELPER_PREFIX,
   importHelperFn,
+  MagicStringAST,
   walkAST,
 } from '@vue-macros/common'
-import { type Options, resolveOption } from './core/options'
+import { resolveOption, type Options } from './core/options'
 import type { Node } from 'oxc-parser'
 import type { UnpluginOptions } from 'unplugin'
 

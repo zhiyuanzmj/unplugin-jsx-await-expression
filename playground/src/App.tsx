@@ -1,4 +1,4 @@
-import { Suspense, defineComponent, ref } from 'vue'
+import { defineComponent, ref, Suspense } from 'vue'
 
 const getList = async (length: number) => {
   await new Promise((r) => setTimeout(r, 1000))
