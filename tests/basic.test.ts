@@ -35,12 +35,12 @@ defineComponent(()=>{
         return () => <>{
           __MACROS_createVNode({async setup() {
                   const __MACROS_resolved = __MACROS_shallowRef()
-                  const __MACROS_isInject = __MACROS_shallowRef()
+                  const __MACROS_isReject = __MACROS_shallowRef()
                   await new Promise((resolve) =>
                     __MACROS_watchEffect(async () => resolve(await getList(length.value)
           .then(items => items)
-          .then((items) => {__MACROS_isInject.value = false; __MACROS_resolved.value = items })
-          .catch((e) => {__MACROS_isInject.value = true; __MACROS_resolved.value = e }))));return () => __MACROS_isInject.value ? (((e) => <>{e.message}</>))(__MACROS_resolved.value) : ((items) => items.map((i) => <div>{i}{length.value}</div>))(__MACROS_resolved.value)}})
+          .then((items) => {__MACROS_isReject.value = false; __MACROS_resolved.value = items })
+          .catch((e) => {__MACROS_isReject.value = true; __MACROS_resolved.value = e }))));return () => __MACROS_isReject.value ? (((e) => <>{e.message}</>))(__MACROS_resolved.value) : ((items) => items.map((i) => <div>{i}{length.value}</div>))(__MACROS_resolved.value)}})
         }</>
       })
             "

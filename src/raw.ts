@@ -14,13 +14,12 @@ let parseSync: typeof import('oxc-parser').parseSync
 
 export async function transformJsxAwaitExpression(code: string, id: string) {
   if (!parseSync) {
-    const oxcParser = await import(
+    parseSync = await import(
       // @ts-ignore
       typeof window !== 'undefined'
         ? 'https://cdn.jsdelivr.net/npm/@oxc-parser/binding-wasm32-wasi/browser-bundle.mjs'
         : 'oxc-parser'
-    )
-    parseSync = oxcParser.parseSync
+    ).then((mod) => mod.parseSync)
   }
 
   const s = new MagicStringAST(code)
@@ -39,12 +38,12 @@ export async function transformJsxAwaitExpression(code: string, id: string) {
         const shallowRef = importHelperFn(s, 0, 'shallowRef')
         const watchEffect = importHelperFn(s, 0, 'watchEffect')
         let resolvedFn = ''
-        let injectedFn = ''
+        let rejectedFn = ''
         s.appendRight(
           expression.start,
           `${createVNode}({async setup() {
             const ${HELPER_PREFIX}resolved = ${shallowRef}()
-            const ${HELPER_PREFIX}isInject = ${shallowRef}()
+            const ${HELPER_PREFIX}isReject = ${shallowRef}()
             await new Promise((resolve) =>
               ${watchEffect}(async () => resolve(`,
         )
@@ -68,13 +67,13 @@ export async function transformJsxAwaitExpression(code: string, id: string) {
                 resolvedFn = `(${s.sliceNode(arg)})`
                 s.overwriteNode(
                   arg.body!,
-                  `{${HELPER_PREFIX}isInject.value = false; ${HELPER_PREFIX}resolved.value = ${s.sliceNode(arg.params[0])} }`,
+                  `{${HELPER_PREFIX}isReject.value = false; ${HELPER_PREFIX}resolved.value = ${s.sliceNode(arg.params[0])} }`,
                 )
-              } else if (property.name === 'catch' && !injectedFn) {
-                injectedFn = `(${s.sliceNode(arg)})`
+              } else if (property.name === 'catch' && !rejectedFn) {
+                rejectedFn = `(${s.sliceNode(arg)})`
                 s.overwriteNode(
                   arg.body!,
-                  `{${HELPER_PREFIX}isInject.value = true; ${HELPER_PREFIX}resolved.value = ${s.sliceNode(arg.params[0])} }`,
+                  `{${HELPER_PREFIX}isReject.value = true; ${HELPER_PREFIX}resolved.value = ${s.sliceNode(arg.params[0])} }`,
                 )
               }
             }
@@ -84,7 +83,7 @@ export async function transformJsxAwaitExpression(code: string, id: string) {
           }
         }
 
-        if (!injectedFn && !resolvedFn) {
+        if (!rejectedFn && !resolvedFn) {
           s.appendLeft(
             expression.end,
             `.then(i => ${HELPER_PREFIX}resolved.value = i)`,
@@ -92,7 +91,7 @@ export async function transformJsxAwaitExpression(code: string, id: string) {
         }
         s.appendLeft(
           expression.end,
-          `)));return () => ${injectedFn ? `${HELPER_PREFIX}isInject.value ? (${injectedFn})(${HELPER_PREFIX}resolved.value) :` : ''} ${resolvedFn}(${HELPER_PREFIX}resolved.value)`,
+          `)));return () => ${rejectedFn ? `${HELPER_PREFIX}isReject.value ? (${rejectedFn})(${HELPER_PREFIX}resolved.value) :` : ''} ${resolvedFn}(${HELPER_PREFIX}resolved.value)`,
         )
         s.appendLeft(expression.end, `}})`)
       }
